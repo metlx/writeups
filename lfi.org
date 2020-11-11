@@ -2,10 +2,10 @@
 
 * nmap
 - results
-  2 ports open
-  ssh on usual port
-  http on usual port
-  ubuntu machine
+  - 2 ports open
+  - ssh on usual port
+  - http on usual port
+  - ubuntu machine
 
 #+begin_src bash
 
