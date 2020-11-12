@@ -1,6 +1,6 @@
-#+TITLE: lazy
+#+TITLE: https://tryhackme.com/room/lazyadmin
 
-* nmap
+- nmap
 
 #+begin_src bash
 
