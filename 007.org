@@ -144,6 +144,8 @@ Hydra v9.1 (c) 2020 by van Hauser/THC & David Maciejak - Please do not use in mi
 #+end_src
 
 * pop3
+#+begin_src bash
+
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
 └──╼ # telnet 10.10.88.137 55007
 Trying 10.10.88.137...
@@ -179,7 +181,7 @@ Received: from doak (localhost [127.0.0.1])
                 password: 4England!
 
 - more creds
-  
+
   : username: xenia
   : password: RCP90rulez!
 
@@ -298,9 +300,14 @@ Received: from doak (localhost [127.0.0.1])
 
                                   Since you're a Linux user just point this servers IP to severnaya-station.com in /etc/hosts.
 
+
+#+end_src
+
 * gobuster
 
 http://severnaya-station.com/gnocertdir/blog/
+
+#+begin_src bash
 
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/007]
 └──╼ # gobuster dir -u http://severnaya-station.com/gnocertdir/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
@@ -356,6 +363,10 @@ Progress: 26642 / 87665 (30.39%)^C
 ===============================================================
 2020/11/13 10:52:29 Finished
 ===============================================================
+
+#+end_src
+
+
 
 * moodle
 Moodle is an open source (webbased) learning
