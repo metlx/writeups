@@ -1,6 +1,8 @@
 #+TITLE: lian-yu
 
 * nmap
+#+begin_src bash
+
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/lian_yu]
 └──╼ # nmap -sC -sV -oA nmap/scan 10.10.238.114
 Starting Nmap 7.91 ( https://nmap.org ) at 2020-11-15 16:00 EST
@@ -33,7 +35,11 @@ Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 24.09 seconds
 
+#+end_src
+
 * gobuster
+#+begin_src bash
+
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/lian_yu]
 └──╼ # gobuster dir -u 10.10.238.114 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
 ===============================================================
@@ -56,11 +62,15 @@ Progress: 71614 / 87665 (81.69%)^C
 2020/11/15 16:26:44 Finished
 ===============================================================
 
+#+end_src
+
 * /island
 
 [[file:./images/screenshot-01.png]]
 
-- gobuster
+* gobuster to the rescue
+#+begin_src bash
+
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/lian_yu]
 └──╼ # gobuster dir -u 10.10.238.114/island -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
 ===============================================================
@@ -83,8 +93,11 @@ Progress: 12935 / 87665 (14.76%)^C
 2020/11/15 16:59:01 Finished
 ===============================================================
 
+#+end_src
+
 * http://10.10.238.114/island/2100/
 [[file:./images/screenshot-03.png]]
+#+begin_src html
 
 <!DOCTYPE html>
 <html>
@@ -102,7 +115,12 @@ Progress: 12935 / 87665 (14.76%)^C
 </body>
 </html>
 
-- gobuster
+#+end_src
+
+
+* more gobuster
+#+begin_src bash
+
 ┌─[root@parrot-virtual]─[~/haxx/ctf/thm/lian_yu]
 └──╼ # gobuster dir -u 10.10.238.114/island/2100 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x ticket
 ===============================================================
@@ -125,6 +143,8 @@ Progress: 10480 / 87665 (11.95%)^C
 ===============================================================
 2020/11/15 17:08:28 Finished
 ===============================================================
+
+#+end_src
 
 * http://10.10.238.114/island/2100/green_arrow.ticket
 [[file:./images/screenshot-04.png]]
