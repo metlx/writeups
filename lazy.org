@@ -198,8 +198,9 @@ Progress: 31190 / 87665 (35.58%)^C
 #+end_src
 
 * uploaded php_reverse_shell
+#+begin_src php
 
-<?php
+ <?php
 // php-reverse-shell - A Reverse Shell implementation in PHP
 // Copyright (C) 2007 pentestmonkey@pentestmonkey.net
 //
@@ -388,6 +389,9 @@ function printit ($string) {
 }
 
 ?>
+
+#+end_src
+
 * users
 - itguy
   - flag
