@@ -49,7 +49,9 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2020-11-24 22:11:
 
 * id_rsa
 [[file:./images/screenshot-26.png]]
-- -----BEGIN RSA PRIVATE KEY-----
+#+begin_src bash
+
+ -----BEGIN RSA PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
 DEK-Info: AES-128-CBC,E32C44CDC29375458A02E94F94B280EA
 
@@ -79,6 +81,8 @@ zQ8oFwPXTszUYgNjg5RFgj/MBYTraL6VYDAepn4YowdaAlv3M8ICRKQ3GbQEV6ZC
 miDKAMx3K3VJpsY4aV52au5x43do6e3xyTSR7E2bfsUblzj2b+mZXrmxst+XDU6u
 x1a9TrlunTcJJZJWKrMTEL4LRWPwR0tsb25tOuUr6DP/Hr52MLaLg1yIGR81cR+W
 -----END RSA PRIVATE KEY-----
+
+#+end_src
 
 * john
 - password
